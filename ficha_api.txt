@@ -1,0 +1,56 @@
+FICHA DE LA API - Practica 12
+Herramientas de Visualizacion - Unidad II - Grupo IDIA222
+Alumna: Amayrani Guadalupe Perusquia Gutierrez
+
+1. Nombre y liga
+   API: NASA NeoWs (Near Earth Object Web Service)
+   Portal y documentacion: https://api.nasa.gov  (seccion "Asteroids - NeoWs")
+
+2. Que datos entrega
+   Los asteroides que pasan cerca de la Tierra en un rango de fechas. De cada uno
+   da su tamano estimado, su brillo (magnitud absoluta), si la NASA lo considera
+   potencialmente peligroso, la velocidad y la distancia a la que paso.
+
+3. Como obtuve el token
+   a) Entre a https://api.nasa.gov
+   b) Llene el formulario "Generate API Key" con nombre, apellido y correo
+   c) La llave aparecio al momento en pantalla y tambien me llego al correo
+   d) No pidio tarjeta ni aprobacion manual
+
+4. Como se manda el token
+   Como parametro en la URL, con el nombre exacto: api_key
+
+5. Limite de peticiones
+   1,000 peticiones por hora con llave propia (la DEMO_KEY solo permite 30 por hora
+   y 50 por dia). La respuesta trae el encabezado X-RateLimit-Remaining.
+   Ademas, cada peticion solo acepta un rango de maximo 7 dias.
+
+6. Endpoint elegido
+   https://api.nasa.gov/neo/rest/v1/feed?start_date=2026-07-01&end_date=2026-07-07&api_key=XXXXXXXXXXXXXXXX
+   Lo llamo 13 veces (13 semanas, del 1 de julio al 29 de septiembre de 2026)
+   y junto las respuestas. Con solo 4 semanas salian 145 registros y no
+   alcanzaba el minimo de 200.
+
+7. Estructura del JSON
+   La tabla vive en datos["near_earth_objects"]["AAAA-MM-DD"] -> una lista por dia.
+   Dentro de cada asteroide:
+     datos["near_earth_objects"][dia][i]["estimated_diameter"]["meters"]
+     datos["near_earth_objects"][dia][i]["close_approach_data"][0]["relative_velocity"]
+     datos["near_earth_objects"][dia][i]["close_approach_data"][0]["miss_distance"]
+
+8. Columnas y registros
+   | Columna          | Tipo     | Unidad                | Nota                         |
+   | fecha            | fecha    | dia                   | close_approach_date          |
+   | diametro_m       | numero   | metros                | promedio de min y max        |
+   | velocidad_kms    | numero   | km/s                  | llega como TEXTO, se convierte |
+   | distancia_lunar  | numero   | distancias lunares    | llega como TEXTO, se convierte |
+   | magnitud_h       | numero   | magnitud (sin unidad) |                              |
+   | peligroso        | booleano | si/no                 |                              |
+   | tamano           | categoria| 4 grupos              | creada a partir del diametro |
+   Registros: [PON AQUI los Registros utilizables de salida.txt]
+
+9. Mis cuatro preguntas
+   G1 (Distribucion): Como se reparten los tamanos de los asteroides? Hay casos extremos?
+   G2 (Comparacion): Que grupo de tamano pasa mas rapido?
+   G3 (Relacion):    Los asteroides mas grandes pasan mas lejos o mas cerca de la Tierra?
+   G4 (Evolucion):   Cuantos asteroides pasan cada dia y como cambia a lo largo del mes?
